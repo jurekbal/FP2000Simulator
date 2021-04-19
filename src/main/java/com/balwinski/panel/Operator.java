@@ -15,8 +15,8 @@ public enum Operator {
     OR_NOT,
     OR_OPEN_BRACKET,
     OR_NOT_OPEN_BRACKET,
-    OPEN_BRACKET_ONLY,
+    OPEN_BRACKET,
     NOT_OPEN_BRACKET,
     CLOSING_BRACKET,
-    END;
+    END
 }

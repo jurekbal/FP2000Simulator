@@ -8,8 +8,8 @@ import java.util.List;
 class ExpressionParserTest {
 
     @Test
-    void mustThrowExceptionOnIncorrectLieType() {
-        // TODO prepare apropriate test data
+    void justGeneralRuntimeExpressionParserTest() {
+        // TODO prepare appropriate test data and assertions (or better: sensible test cases)
         TextFileReader textFileReader = new TextFileReader();
         List<String> lines = textFileReader.readLogic();
         ExpressionParser expressionParser = new ExpressionParser(lines);
