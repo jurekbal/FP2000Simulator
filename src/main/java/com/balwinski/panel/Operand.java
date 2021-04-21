@@ -9,5 +9,6 @@ public enum Operand {
     NOT_INPUT,
     NOT_OUTPUT,
     NOT_FLAG,
-    NOT_TIMER;
+    NOT_TIMER,
+    ERROR
 }

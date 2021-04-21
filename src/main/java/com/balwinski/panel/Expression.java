@@ -54,6 +54,17 @@ public class Expression {
     public void setParameter2(int parameter2) {
         this.parameter2 = parameter2;
     }
+
+    @Override
+    public String toString() {
+        return "Expression{" +
+                "line=" + line +
+                ", operator=" + operator +
+                ", operand=" + operand +
+                ", parameter1=" + parameter1 +
+                ", parameter2=" + parameter2 +
+                '}';
+    }
 }
 
 

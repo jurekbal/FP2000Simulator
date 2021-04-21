@@ -1,90 +1,36 @@
 Linia      Operator   Operand    Numer      Czas       
 1          (          Wejście    1          
-2          i          Wejście    2          
-3          ) =        Wyjście    1          
-4          (          Wejście    1          
-5          i          Wejście    2          
-6          ) =        Wyjście    2          
-7          (          Wejście    1          
-8          i (        Wejście    3          
-9          lub        Wejście    12         
-10         )                     0          
-11         ) =        Wyjście    3          
-12         (          Wejście    13         
-13         lub (      Wejście    1          
-14         i          Wejście    2          
-15         )                     0          
-16         ) =        Wyjście    4          
-17         (          Wejście    1          
-18         ) =        Wyjście    5          
-19         (          Wejście    1          
-20         ) =        Wyjście    6          
-21         (          Wejście    1          
-22         ) =        Wyjście    7          
-23         (          Wejście    1          
-24         ) =        Wyjście    8          
-25         (          Wejście    1          
-26         ) =        Wyjście    9          
-27         (          Wejście    1          
-28         ) =        Wyjście    10         
-29         (          Wejście    1          
-30         ) =        Wyjście    11         
-31         (          Wejście    1          
-32         ) =        Wyjście    12         
-33         (          Wejście    1          
-34         ) =        Wyjście    13         
-35         (          Wejście    1          
-36         ) =        Wyjście    14         
-37         (          Wejście    1          
-38         ) =        Wyjście    15         
-39         (          Wejście    1          
-40         ) =        Wyjście    16         
-41         (          Wejście    1          
-42         ) =        Wyjście    17         
-43         (          Wejście    1          
-44         ) =        Wyjście    18         
-45         (          Wejście    1          
-46         ) =        Wyjście    19         
-47         (          Wejście    1          
-48         ) =        Wyjście    20         
-49         (          Wejście    1          
-50         ) =        Wyjście    21         
-51         (          Wejście    1          
-52         ) =        Wyjście    22         
-53         (          Wejście    1          
-54         ) =        Wyjście    23         
-55         (          Wejście    1          
-56         ) =        Wyjście    24         
-57         (          Wejście    8          
-58         lub        Wejście    9          
-59         ) =        Znacznik   1          
-60         (          Wejście    10         
-61         lub        Wejście    11         
-62         ) =        Znacznik   2          
-63         (          Znacznik   1          
-64         i          Znacznik   2          
-65         ) =        Znacznik   3          
-66         (          Znacznik   3          
-67         lub        Wejście    4          
-68         ) =        Wyjście    25         
-69         (          Wejście    1          
-70         ) =        Wyjście    26         
-71         (          Wejście    1          
-72         ) =        Wyjście    27         
-73         (          Wejście    1          
-74         ) =        Wyjście    28         
-75         (          Wejście    1          
-76         ) =        Wyjście    29         
-77         (          Wejście    5          
-78         ) =        Wyjście    30         
-79         (          Wejście    1          
-80         ) =        Wyjście    31         
-81         (          Wejście    1          
-82         ) =        Wyjście    32         
-83         (          Wejście    1          
-84         ) =        Wyjście    33         
-85         (          Wejście    1          
-86         ) =        Wyjście    34         
-87         (          Wejście    1          
-88         ) =        Wyjście    35         
-89         koniec                0 
+2          ) =        Wyjście    10         
+3          (          Wejście    1          
+4          lub        Wejście    2          
+5          ) =        Znacznik   1          
+6          (          Znacznik   1          
+7          i nie      Wejście    3          
+8          ) =        Wyjście    13         
+9          (          nie Wej    1          
+10         ) =        Wyjście    11         
+11         (          Wejście    5          
+12         ) =        nie Wyj    12         
+13         (          nie Znacz  1          
+14         ) =        Wyjście    14         
+15         (          Wejście    6          
+16         ) =        Zegar      1          30
+17         (          nie Zegar  1          
+18         ) =        nie Znacz  2          
+19         (          Wejście    7          
+20         ) ustaw-p  Wyjście    15         
+21         (          Wejście    8          
+22         i nie (    Wejście    9          
+23         )                     0          
+24         ) kasuj-p  Wyjście    15         
+25         (          Wejście    9          
+26         ) ustaw-z  Wyjście    16         
+27         (          Znacznik   1          
+28         lub nie (  Wejście    10         
+29         )                     0          
+30         ) kasuj-z  Wyjście    16         
+31         nie (      Zegar      1          
+32         ) =        Znacznik   2          
+33         (          Znacznik   2          
+34         ) =        Wyjście    17         
+35         koniec                0     

@@ -15,7 +15,7 @@ public class ExpressionParser {
         String[] parts = logicTable.get(i).split(" {2,}");
         int partsNum = parts.length;
 
-        int logicLineNumber, parameter1, parameter2;
+        int logicLineNumber, parameter1 = 0, parameter2 = 0;
         Operator operator;
         Operand operand = Operand.EMPTY;
         LineType lineType;
@@ -51,8 +51,10 @@ public class ExpressionParser {
 
         // DEBUG
         System.out.println(lineType+"|"+operator+"|"+operand);
+        Expression expression = new Expression(logicLineNumber, operator, operand, parameter1, parameter2);
+        System.out.println(expression.toString());
 
-        return null;
+        return expression;
     }
 
     private Operator parseOperator(String part) {
@@ -78,30 +80,41 @@ public class ExpressionParser {
             case ")" : {
                 return Operator.CLOSING_BRACKET;
             }
-
-            // TODO implement rest of operators
-
+            case "i nie" : {
+                return  Operator.AND_NOT;
+            }
+            case "i nie (" : {
+                return  Operator.AND_NOT_OPEN_BRACKET;
+            }
+            case "lub nie" : {
+                return Operator.OR_NOT;
+            }
+            case "lub nie (" : {
+                return Operator.OR_NOT_OPEN_BRACKET;
+            }
+            case "nie (" : {
+                return Operator.NOT_OPEN_BRACKET;
+            }
             case "koniec" : {
                 return Operator.END;
             }
-            case ")kasuj-z" : {
+            case ") kasuj-z" : {
                 return Operator.RESET_Z;
             }
-            case ")ustaw-z" : {
+            case ") ustaw-z" : {
                 return Operator.SET_Z;
             }
-            case ")ustaw-p" : {
+            case ") ustaw-p" : {
                 return Operator.SET_P;
             }
-            case ")kasuj-p" : {
+            case ") kasuj-p" : {
                 return Operator.RESET_P;
             }
             default: {
-                return null;
+                // In printed logic table EMPTY do not occurs - should be treated as error?
+                return Operator.EMPTY;
             }
-
         }
-        // TODO check "kasuj-x/ustaw-x" matching
     }
 
     private Operand parseOperand(String part) {
@@ -118,12 +131,21 @@ public class ExpressionParser {
             case "Zegar" : {
                 return Operand.TIMER;
             }
+            case "nie Wej" : {
+                return Operand.NOT_INPUT;
+            }
+            case "nie Wyj" : {
+                return Operand.NOT_OUTPUT;
+            }
+            case "nie Znacz" : {
+                return Operand.NOT_FLAG;
+            }
+            case "nie Zegar" : {
+                return Operand.NOT_TIMER;
+            }
             default: {
-                return null;
+                return Operand.ERROR;
             }
         }
-        // TODO implementation of exotic operands not_ ...
     }
-
-
 }
