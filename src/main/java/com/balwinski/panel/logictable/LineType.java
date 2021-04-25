@@ -1,4 +1,4 @@
-package com.balwinski.panel;
+package com.balwinski.panel.logictable;
 
 public enum LineType {
     THREE_PARTS,

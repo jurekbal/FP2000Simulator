@@ -1,4 +1,4 @@
-package com.balwinski.panel;
+package com.balwinski.panel.logictable;
 
 public class InvalidDataException extends RuntimeException {
     public InvalidDataException(String message) {

@@ -1,4 +1,7 @@
-package com.balwinski.panel;
+package com.balwinski.panel.logictable;
+
+import com.balwinski.panel.logictable.Operand;
+import com.balwinski.panel.logictable.Operator;
 
 public class Expression {
     private int line;

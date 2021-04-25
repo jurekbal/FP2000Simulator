@@ -1,18 +1,23 @@
-package com.balwinski.panel;
+package com.balwinski.services;
 
+import com.balwinski.panel.logictable.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class ExpressionParser {
+public class LogicTableParser {
 
-    private final List<String> logicTable;
-
-    public ExpressionParser(List<String> logicTable) {
-        this.logicTable = logicTable;
+    public List<Expression> parseToExpressions(List<String> logicTableStrings) {
+        List<Expression> parsedTable = new ArrayList<>();
+        for (int i = 1; i < logicTableStrings.size(); i++) {
+            parsedTable.add(parseLine(logicTableStrings.get(i)));
+        }
+        return parsedTable;
     }
 
-    public Expression parseLine(int i) {
+    private Expression parseLine(String line) {
 
-        String[] parts = logicTable.get(i).split(" {2,}");
+        String[] parts = line.split(" {2,}");
         int partsNum = parts.length;
 
         int logicLineNumber, parameter1 = 0, parameter2 = 0;
@@ -45,14 +50,15 @@ public class ExpressionParser {
                 break;
             }
             default: {
-                throw new InvalidDataException("Unrecognized Line Type: " + logicTable.get(i));
+                throw new InvalidDataException("Unrecognized Line Type: " + line);
             }
         }
 
-        // DEBUG
-        System.out.println(lineType+"|"+operator+"|"+operand);
         Expression expression = new Expression(logicLineNumber, operator, operand, parameter1, parameter2);
-        System.out.println(expression.toString());
+
+        // DEBUG
+//        System.out.println(lineType+"|"+operator+"|"+operand);
+//        System.out.println(expression.toString());
 
         return expression;
     }

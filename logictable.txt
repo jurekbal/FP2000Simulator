@@ -3,34 +3,7 @@ Linia      Operator   Operand    Numer      Czas
 2          ) =        Wyjście    10         
 3          (          Wejście    1          
 4          lub        Wejście    2          
-5          ) =        Znacznik   1          
-6          (          Znacznik   1          
-7          i nie      Wejście    3          
-8          ) =        Wyjście    13         
-9          (          nie Wej    1          
-10         ) =        Wyjście    11         
-11         (          Wejście    5          
-12         ) =        nie Wyj    12         
-13         (          nie Znacz  1          
-14         ) =        Wyjście    14         
-15         (          Wejście    6          
-16         ) =        Zegar      1          30
-17         (          nie Zegar  1          
-18         ) =        nie Znacz  2          
-19         (          Wejście    7          
-20         ) ustaw-p  Wyjście    15         
-21         (          Wejście    8          
-22         i nie (    Wejście    9          
-23         )                     0          
-24         ) kasuj-p  Wyjście    15         
-25         (          Wejście    9          
-26         ) ustaw-z  Wyjście    16         
-27         (          Znacznik   1          
-28         lub nie (  Wejście    10         
-29         )                     0          
-30         ) kasuj-z  Wyjście    16         
-31         nie (      Zegar      1          
-32         ) =        Znacznik   2          
-33         (          Znacznik   2          
-34         ) =        Wyjście    17         
-35         koniec                0     
+5          ) =        Wyjście    20
+6          nie (      Wejście    3
+8          ) =        Wyjście    30
+9          koniec                0

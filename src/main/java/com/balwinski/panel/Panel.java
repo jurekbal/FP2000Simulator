@@ -1,11 +1,188 @@
 package com.balwinski.panel;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.balwinski.panel.logictable.*;
+import com.balwinski.panel.logictable.Timer;
+
+import java.util.*;
 
 public class Panel {
+
+    private final Set<Operator> openingOperators = new HashSet<>(Arrays.asList(
+            Operator.OPEN_BRACKET, Operator.NOT_OPEN_BRACKET, Operator.END));
+    private final Set<Operator> continueOperators = new HashSet<>(Arrays.asList(
+            Operator.AND, Operator.AND_NOT, Operator.AND_OPEN_BRACKET, Operator.AND_NOT_OPEN_BRACKET,
+            Operator.OR, Operator.OR_NOT, Operator.OR_OPEN_BRACKET, Operator.OR_NOT_OPEN_BRACKET
+    ));
+    private final Set<Operator> closingOperators = new HashSet<>(Arrays.asList(
+            Operator.RESULT, Operator.SET_P, Operator.RESET_P, Operator.SET_Z, Operator.RESET_Z,
+            Operator.CLOSING_BRACKET
+    ));
+
+    private final Set<Operator> openingOperatorTemp = new HashSet<>(Arrays.asList(
+            Operator.OPEN_BRACKET));
+    private final Set<Operator> closingOperatorTemp = new HashSet<>(Arrays.asList(
+            Operator.RESULT));
+
+    private final Configuration configuration;
+    private List<Expression> logicTable;
+
     private final boolean[] inputs = new boolean[301];
     private final boolean[] outputs = new boolean[1000];
-
     private final Map<Integer, Timer> timers = new HashMap<>();
+    private final Map<Integer, Boolean> flags = new HashMap<>();
+
+    public boolean[] getInputs() {
+        return inputs;
+    }
+
+    public boolean[] getOutputs() {
+        return outputs;
+    }
+
+    private int currentLine;
+    private int statementLevel;
+
+    public Panel(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    public void boot() {
+        logicTable = configuration.getLogicTable();
+        try {
+            runTable();
+        } catch (InvalidDataException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void runTable() throws InvalidDataException {
+        Set<Integer> declaredTimers = new HashSet<>();
+        Set<Integer> declaredFlags = new HashSet<>();
+        Set<Operator> expectedOperator = new HashSet<>(openingOperators);
+        boolean statementResult = false;
+
+        Expression expression;
+        Operator operator;
+        statementLevel = 0;
+        currentLine = 0;
+
+        while (currentLine < logicTable.size()) {
+
+            // Process one statement each iteration
+            expression = logicTable.get(currentLine);
+            operator = expression.getOperator();
+
+            switch (operator) {
+                case OPEN_BRACKET: {
+                    statementResult = processStatement(false);
+                    break;
+                }
+                case NOT_OPEN_BRACKET: {
+                    statementResult = !processStatement(false);
+                    break;
+                }
+                case END: {
+                    return;
+                }
+                default: {
+                    throw new InvalidDataException("Unexpected Operator " + operator +
+                            " at line " + expression.getLine() + "(" + currentLine + ") - expecting begin of statement or END");
+                }
+            }
+
+            // write statement result
+            expression = logicTable.get(currentLine);
+            operator = expression.getOperator(); // should be closing operator - checked by processStatement()
+            switch (operator) {
+                case RESULT: {
+                    setStatementResult(statementResult, expression);
+                    currentLine++;
+                    break;
+                }
+                // TODO impl. rest result cases
+                default: {
+                    throw new InvalidDataException("Unsupported result operator: " + operator + " at line " +
+                            expression.getLine() + " (" + currentLine + ")");
+                }
+
+            }
+
+        }
+
+    }
+
+
+    private void setStatementResult(boolean statementResult, Expression expression) throws InvalidDataException {
+        switch (expression.getOperand()) {
+            case OUTPUT: {
+                outputs[expression.getParameter1()] = statementResult;
+                break;
+            }
+            // TODO implement FLAG, TIMER, SET_P?, SET_Z?
+            default: {
+                throw new InvalidDataException("Unsupported or unexpected operand " + expression.getOperand() +
+                        " at line " + expression.getLine() + " (" + currentLine + ")");
+            }
+        }
+    }
+
+    private boolean processStatement(boolean priorValue) throws InvalidDataException {
+        //TODO
+        Expression expression = logicTable.get(currentLine);
+        Operator operator;
+        Operand operand = expression.getOperand();
+        if(++statementLevel > 7) {
+            throw new StatementLevelTooDeepException("Exceeded at line " + expression.getLine() +
+                    " (" + currentLine + ")");
+        };
+
+        boolean currentValue = getValue(expression);
+
+
+        while(++currentLine < logicTable.size()) {
+            expression = logicTable.get(currentLine);
+            operator = expression.getOperator();
+
+            switch (operator) {
+                case RESULT: {
+                    if(--statementLevel != 0) {
+                        throw new UnexpectedOperatorException("Operator " + operator +
+                                "is not allowed at statement level" + statementLevel + ". Check brackets");
+                    }
+                    return currentValue;
+                }
+                case OR: {
+                    currentValue = currentValue || getValue(expression);
+                }
+            }
+
+        };
+
+
+        return currentValue;
+    }
+
+    private boolean getValue(Expression expression) {
+        Operand operand = expression.getOperand();
+        boolean currentValue;
+        switch (operand) {
+            case INPUT: {
+                currentValue = inputs[expression.getParameter1()];
+                break;
+            }
+            case FLAG: {
+                currentValue = flags.get(expression.getParameter1());
+                break;
+            }
+            // TODO rest cases here
+            default: {
+                throw new InvalidDataException("Unexpected Operand " + operand +
+                        " at line " + expression.getLine() + " (" + currentLine + ")");
+            }
+        }
+
+        return currentValue;
+    }
+
+
 }

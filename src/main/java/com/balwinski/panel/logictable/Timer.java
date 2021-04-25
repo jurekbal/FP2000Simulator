@@ -1,4 +1,4 @@
-package com.balwinski.panel;
+package com.balwinski.panel.logictable;
 
 /*
 Timer number scope: 1-250
