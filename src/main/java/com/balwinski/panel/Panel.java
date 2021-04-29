@@ -13,9 +13,8 @@ public class Panel {
             Operator.AND, Operator.AND_NOT, Operator.AND_OPEN_BRACKET, Operator.AND_NOT_OPEN_BRACKET,
             Operator.OR, Operator.OR_NOT, Operator.OR_OPEN_BRACKET, Operator.OR_NOT_OPEN_BRACKET
     ));
-    private final Set<Operator> closingOperators = new HashSet<>(Arrays.asList(
-            Operator.RESULT, Operator.SET_P, Operator.RESET_P, Operator.SET_Z, Operator.RESET_Z,
-            Operator.CLOSING_BRACKET
+    private final Set<Operator> resultSettingOperators = new HashSet<>(Arrays.asList(
+            Operator.RESULT, Operator.SET_P, Operator.RESET_P, Operator.SET_Z, Operator.RESET_Z
     ));
 
     private final Set<Operator> openingOperatorTemp = new HashSet<>(Arrays.asList(
@@ -56,19 +55,17 @@ public class Panel {
     }
 
     private void runTable() throws InvalidDataException {
-        Set<Integer> declaredTimers = new HashSet<>();
-        Set<Integer> declaredFlags = new HashSet<>();
-        Set<Operator> expectedOperator = new HashSet<>(openingOperators);
-        boolean statementResult = false;
 
         Expression expression;
         Operator operator;
+        boolean statementResult;
         statementLevel = 0;
         currentLine = 0;
 
         while (currentLine < logicTable.size()) {
 
             // Process one statement each iteration
+            // Statement begins with "(" or "not (" at level 0 and ends with one of result setting operators
             expression = logicTable.get(currentLine);
             operator = expression.getOperator();
 
@@ -93,22 +90,15 @@ public class Panel {
             // write statement result
             expression = logicTable.get(currentLine);
             operator = expression.getOperator(); // should be closing operator - checked by processStatement()
-            switch (operator) {
-                case RESULT: {
-                    setStatementResult(statementResult, expression);
-                    currentLine++;
-                    break;
-                }
-                // TODO impl. rest result cases
-                default: {
-                    throw new InvalidDataException("Unsupported result operator: " + operator + " at line " +
-                            expression.getLine() + " (" + currentLine + ")");
-                }
 
+            if (resultSettingOperators.contains(operator)) {
+                setStatementResult(statementResult, expression);
+                currentLine++;
+            } else {
+                throw new InvalidDataException("Unsupported result operator: " + operator + " at line " +
+                        expression.getLine() + " (" + currentLine + ")");
             }
-
         }
-
     }
 
 
@@ -118,7 +108,11 @@ public class Panel {
                 outputs[expression.getParameter1()] = statementResult;
                 break;
             }
-            // TODO implement FLAG, TIMER, SET_P?, SET_Z?
+            case FLAG: {
+                flags.put(expression.getParameter1(), statementResult);
+                break;
+            }
+            // TODO implement TIMER, SET_P?, SET_Z?
             default: {
                 throw new InvalidDataException("Unsupported or unexpected operand " + expression.getOperand() +
                         " at line " + expression.getLine() + " (" + currentLine + ")");
@@ -151,13 +145,16 @@ public class Panel {
                     }
                     return currentValue;
                 }
+                // TODO implement rest of closing operators
                 case OR: {
                     currentValue = currentValue || getValue(expression);
+                }
+                case AND: {
+                    currentValue = currentValue && getValue(expression);
                 }
             }
 
         };
-
 
         return currentValue;
     }
@@ -171,7 +168,7 @@ public class Panel {
                 break;
             }
             case FLAG: {
-                currentValue = flags.get(expression.getParameter1());
+                currentValue = flags.getOrDefault(expression.getParameter1(), false);
                 break;
             }
             // TODO rest cases here

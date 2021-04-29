@@ -23,7 +23,8 @@ public class Main {
 
         boolean[] inputs = panel.getInputs();
         inputs[2] = true;
-//        inputs[3] = true;
+        inputs[4] = true;
+        inputs[5] = true;
         panel.boot();
 
         boolean[] outputs = panel.getOutputs();
