@@ -26,7 +26,7 @@ public class Main {
         inputs[2] = true;
         inputs[4] = true;
         inputs[5] = false;
-        inputs[6] = true;
+        inputs[6] = false;
         inputs[7] = false;
         inputs[8] = false;
         panel.boot();

@@ -17,7 +17,7 @@ Linia      Operator   Operand    Numer      Czas
 17         (          Znacznik   5
 18         ) =        Wyjście    55
 19         (          Wejście    6
-20         i nie (    Wejście    7
+20         i (        Wejście    7
 21         lub        Wejście    8
 22         )
 23         ) =        Wyjście    61

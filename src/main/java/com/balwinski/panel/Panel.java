@@ -129,28 +129,30 @@ public class Panel {
                 }
                 // TODO implement rest of closing operators
                 case AND: {
-                    currentValue = currentValue && getValue(expression);
+                    currentValue = getValue(expression) && currentValue;
                     break;
                 }
                 case AND_NOT: {
-                    currentValue = currentValue && !getValue(expression);
+                    currentValue = !getValue(expression) && currentValue;
                     break;
                 }
                 case AND_OPEN_BRACKET: {
-                    boolean substatementResult = processStatement();
-                    currentValue = currentValue && substatementResult;
+                    // make sure JVM will not ignore to call processStatement when currentValue is false!
+                    // here: it has to be first operand in expression! (or maybe better use local variable before)
+                    // It's a bad design I suppose...
+                    currentValue = processStatement() && currentValue;
                     break;
                 }
                 case AND_NOT_OPEN_BRACKET: {
-                    currentValue = currentValue && !processStatement();
+                    currentValue = !processStatement() && currentValue;
                     break;
                 }
                 case OR: {
-                    currentValue = currentValue || getValue(expression);
+                    currentValue = getValue(expression) || currentValue;
                     break;
                 }
                 case OR_NOT: {
-                    currentValue = currentValue || !getValue(expression);
+                    currentValue = !getValue(expression) || currentValue;
                     break;
                 }
                 case CLOSING_BRACKET: {
