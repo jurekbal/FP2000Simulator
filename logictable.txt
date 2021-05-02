@@ -2,7 +2,7 @@ Linia      Operator   Operand    Numer      Czas
 1          (          Wejście    1          
 2          ) =        Wyjście    10         
 3          (          Wejście    1          
-4          lub        Wejście    2
+4          lub nie    Wejście    2
 5          ) =        Wyjście    20
 6          nie (      Wejście    3
 8          ) =        Wyjście    30
@@ -10,10 +10,15 @@ Linia      Operator   Operand    Numer      Czas
 10         i          Wejście    5
 11         ) =        Wyjście    40
 12         (          Wejście    4
-13         i          Wejście    5
+13         i nie      Wejście    5
 14         ) =        Znacznik   5
 15         (          Znacznik   5
 16         ) =        Wyjście    50
 17         (          Znacznik   5
 18         ) =        Wyjście    55
-19         koniec                0
+19         (          Wejście    6
+20         i nie (    Wejście    7
+21         lub        Wejście    8
+22         )
+23         ) =        Wyjście    61
+24         koniec                0

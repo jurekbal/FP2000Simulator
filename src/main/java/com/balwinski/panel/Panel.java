@@ -71,11 +71,11 @@ public class Panel {
 
             switch (operator) {
                 case OPEN_BRACKET: {
-                    statementResult = processStatement(false);
+                    statementResult = processStatement();
                     break;
                 }
                 case NOT_OPEN_BRACKET: {
-                    statementResult = !processStatement(false);
+                    statementResult = !processStatement();
                     break;
                 }
                 case END: {
@@ -89,7 +89,7 @@ public class Panel {
 
             // write statement result
             expression = logicTable.get(currentLine);
-            operator = expression.getOperator(); // should be closing operator - checked by processStatement()
+            operator = expression.getOperator(); // should be result operator - checked by processStatement()
 
             if (resultSettingOperators.contains(operator)) {
                 setStatementResult(statementResult, expression);
@@ -102,26 +102,7 @@ public class Panel {
     }
 
 
-    private void setStatementResult(boolean statementResult, Expression expression) throws InvalidDataException {
-        switch (expression.getOperand()) {
-            case OUTPUT: {
-                outputs[expression.getParameter1()] = statementResult;
-                break;
-            }
-            case FLAG: {
-                flags.put(expression.getParameter1(), statementResult);
-                break;
-            }
-            // TODO implement TIMER, SET_P?, SET_Z?
-            default: {
-                throw new InvalidDataException("Unsupported or unexpected operand " + expression.getOperand() +
-                        " at line " + expression.getLine() + " (" + currentLine + ")");
-            }
-        }
-    }
-
-    private boolean processStatement(boolean priorValue) throws InvalidDataException {
-        //TODO
+    private boolean processStatement() throws InvalidDataException {
         Expression expression = logicTable.get(currentLine);
         Operator operator;
         Operand operand = expression.getOperand();
@@ -141,22 +122,75 @@ public class Panel {
                 case RESULT: {
                     if(--statementLevel != 0) {
                         throw new UnexpectedOperatorException("Operator " + operator +
-                                "is not allowed at statement level" + statementLevel + ". Check brackets");
+                                " is not allowed at statement level " + statementLevel + ". Check brackets at line "
+                                + expression.getLine() + " (" + currentLine + ")");
                     }
                     return currentValue;
                 }
                 // TODO implement rest of closing operators
-                case OR: {
-                    currentValue = currentValue || getValue(expression);
-                }
                 case AND: {
                     currentValue = currentValue && getValue(expression);
+                    break;
                 }
+                case AND_NOT: {
+                    currentValue = currentValue && !getValue(expression);
+                    break;
+                }
+                case AND_OPEN_BRACKET: {
+                    boolean substatementResult = processStatement();
+                    currentValue = currentValue && substatementResult;
+                    break;
+                }
+                case AND_NOT_OPEN_BRACKET: {
+                    currentValue = currentValue && !processStatement();
+                    break;
+                }
+                case OR: {
+                    currentValue = currentValue || getValue(expression);
+                    break;
+                }
+                case OR_NOT: {
+                    currentValue = currentValue || !getValue(expression);
+                    break;
+                }
+                case CLOSING_BRACKET: {
+                    if(--statementLevel < 1) {
+                        throw new UnexpectedOperatorException("Operator " + operator +
+                                " is not allowed at statement level " + statementLevel + ". Check brackets at line "
+                                + expression.getLine() + " (" + currentLine + ")");
+                    }
+                    return currentValue;
+                }
+
+                default: {
+                    throw new UnexpectedOperatorException("Unsupported operator at line " + expression.getLine()
+                            + "(" + currentLine + ")");
+                }
+
+
             }
 
         };
 
         return currentValue;
+    }
+
+    private void setStatementResult(boolean statementResult, Expression expression) throws InvalidDataException {
+        switch (expression.getOperand()) {
+            case OUTPUT: {
+                outputs[expression.getParameter1()] = statementResult;
+                break;
+            }
+            case FLAG: {
+                flags.put(expression.getParameter1(), statementResult);
+                break;
+            }
+            // TODO implement TIMER, SET_P?, SET_Z?
+            default: {
+                throw new InvalidDataException("Unsupported or unexpected operand " + expression.getOperand() +
+                        " at line " + expression.getLine() + " (" + currentLine + ")");
+            }
+        }
     }
 
     private boolean getValue(Expression expression) {

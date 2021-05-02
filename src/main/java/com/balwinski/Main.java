@@ -22,9 +22,13 @@ public class Main {
         Panel panel = new Panel(configuration);
 
         boolean[] inputs = panel.getInputs();
+        inputs[1] = false;
         inputs[2] = true;
         inputs[4] = true;
-        inputs[5] = true;
+        inputs[5] = false;
+        inputs[6] = true;
+        inputs[7] = false;
+        inputs[8] = false;
         panel.boot();
 
         boolean[] outputs = panel.getOutputs();
